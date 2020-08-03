@@ -1,0 +1,8 @@
+tomcat 인코딩 설정을 해야한다
+
+conf 폴더 -> setver.xml -> 우클릭 후 편집 or 메모장을 켠 후 드래그 앤 드랍 -> Connector port 8080 찾는다 ->
+URIEncoding="UTF-8" 을 마지막 부분에 넣어준다 -> jdbc 폴더에 있는 6 라이브러리를 tomcat 라이브러리에 복붙한다
+
+    <Connector port="8089" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" URIEncoding="UTF-8"/>

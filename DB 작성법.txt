@@ -1,0 +1,133 @@
+CREATE TABLE t_student ( --테이블 생성
+    id_student number, --변수 이름과 변수 타입을 지정한다
+    nm varchar2(15) not null, --15byte에 해당하는 문자열을 입력할 수 있다
+    age number(3) not null,
+    primary key(id_student, nm) --이 방법은 프라이머리키(여러 개)를 등록할 수 있다
+);
+pk 2개의 의미 - 조합했을 때 중복이 발생하지 않게 하기 위해서 사용
+= 뒤에는 스칼라 값만 있어야하며 여러 개를 수행하고 싶을때는 in을 붙인다
+null값을 찾고 싶을 때는 is null을 사용한다
+,(콤마) 다음에는 컬럼이 와야한다 다른 절로 넘어갈 때는 한칸 띄우는 것으로 해결된다
+
+INSERT INTO t_student --정보 삽입
+(id_student, nm, age) --순서가 중요하다-values의 값과 매칭시켜줘야한다-컬럼명은 명확하게 하는 것이 좋다
+VALUES
+(2,'석규환',30);
+
+UPDATE t_student -- 정보 수정
+SET nm='이나경' --넣고자 하는 값-컬럼명=값,컬럼명=값,.....,컬럼명=값
+, age=31
+WHERE id_student = 2; --필수 절이다-실제로 수정되는 튜플
+
+DELETE FROM t_student -- 정보 삭제
+WHERE id_student = 3; -- 여러 개를 지우고 싶을 때 WHERE id_student in(1,2...);
+WHERE id_student between 4 and 7
+WHERE id_student >= 4 and id_student <= 7
+
+SELECT id_student, nm, age -- 정보 읽기 모든 컬럼을 읽고 싶을 때는 *을 사용하면 된다
+FROM t_student;
+
+SELECT id_student, nm, age as student_age
+FROM t_student
+WHERE (id_student < 3 AND age >= 30) OR id_student = 5 -- 범위를 지정
+ORDER BY id_student ASC, age DESC; -- 오름차순 또는 내림차순 정리 -무조건 제일 마지막에 위치
+
+SELECT id_student, nm, age as student_age
+FROM t_student
+WHERE nm LIKE '석%'; -- 석으로 시작되는 이름 검색한다
+
+SELECT LOWER(first_name) as first_name --영문 이름을 전부 소문자로 바꾼다
+FROM employees
+WHERE phone_number LIKE '%.423.%';
+
+transaction --여러 작업을 한 작업으로 묶어 놓는 것 -- 여러 작업 중 한 작업이라도 에러가 난다면 실행되지 않도록 하기 위함
+commit --완료처리
+
+SELECT first_name, substr(first_name,4,2)
+FROM employees;
+
+LPAD RPAD SUBSTR INSTR TRIME LENGTH CONCAT -- 자주 쓰는 것들 왼쪽부터 자른다/오른쪽부터 자른다
+
+SELECT max(salary), min(salary), avg(salary), count(*) 
+FROM employees
+WHERE commission_pct is null; -- 모든 레코드에서 보는 것 - 레코드는 하나로 나온다
+
+ceil, floor, round, trunc : 올림, 내림, 반올림, 소수점 자리까지 버림
+trunc(avg(salary), 2) -- 소수점 2자리 까지 구함
+
+SELECT job_id, manager_id, max(salary), min(salary), trunc(ceil(avg(salary))), count(*) 
+FROM employees
+GROUP BY job_id, manager_id; -- 그룹별로 SELECT 값을 보고 싶을 때
+
+SELECT job_id, manager_id, max(salary), min(salary), ceil(avg(salary)), count(*), sum(salary)
+FROM employees
+HAVING count(*) >= 5 -- 그룹 함수 결과물에 대해 조건을 걸고 싶을 때 사용한다(옵션) / WHERE은 전체
+GROUP BY job_id, manager_id; -- 그룹 함수 / 압축의 의미
+
+SELECT 
+JOB_ID
+,DECODE(JOB_ID, 'IT_PROG','프로그래머' -- switch case / if else if 와 비슷하다
+              , 'FI_ACCOUNT', '금융업'
+              , 'AD_VP', '뭐고' , ' ') as ddd
+FROM employees;
+
+SELECT 
+JOB_ID
+,DECODE(JOB_ID, 'IT_PROG','프로그래머'
+	        , 'FI_ACCOUNT', '금융업'
+                    , 'AD_VP', '뭐고', 'ffff')
+,CASE JOB_ID WHEN 'IT_PROG' THEN '프로그래머'
+                  WHEN 'FI_ACCOUNT' THEN '금융업'
+                  WHEN 'AD_VP' THEN '뭐고'
+                  ELSE 'ffff' END
+FROM employees; -- 같은 결과를 가질 수 있다
+
+SELECT 
+salary, CASE WHEN SALARY >= 10000 THEN SALARY*2 
+	    ELSE SALARY END as calcSalary
+FROM employees; -- 조건을 걸어서 결과를 볼 수 있다
+
+SELECT nvl(컬럼명,' ') as 컬럼명 FROM dual; -- null 인 친구들만 특정값으로 바꾸고 싶을 때 대체를 위한 함수
+
+SELECT employee_id, nvl(commission_pct, 0) FROM employees; -- null값을 전부 0으로 표시한다 DB에서 처리하는 편이 좋다 
+
+SELECT distinct job_id FROM employees; -- 중복되는 값을 지운다
+
+SELECT salary
+, CASE WHEN salary >= 20000 THEN salary * 3
+       WHEN salary >= 10000 THEN salary * 2
+       ELSE salary - 1000 END as calcSalary
+FROM employees;
+
+SELECT lpad(phone_number, 3), max(salary), min(salary)
+FROM employees
+GROUP BY lpad(phone_number, 3) -- 지역번호별로 나눔
+HAVING max(salary) >= 10000; -- 그중에 조건
+
+SELECT to_char(sysdate, 'mm-dd-yyyy hh:MI:ss') FROM dual; --데이터 타입을 바꾸기 위함 sysdate는 현재 기준 시간을 담고 있다
+
+DB는 왜 무결성이 중요하고 정규화가 중요한가
+한 컬럼에는 원소값만 들어가야한다 
+수정이 용이하고 중복을 없애고 정리를 하여 무결성을 높이는 것을 정규화라고 한다
+
+Foreign Key - 테이블을 나누면서 PK와 걸어놓아 관계를 나타내는 것
+PK와 걸어놓아 실수를 없앨 수 있다
+ex) PK가 1~3까지 있으면 FK도 1~3까지 존재한다
+
+CREATE TABLE t_student_hobby(
+ i_student number, -- 컬럼 등록
+ i_hobby number,
+ r_dt date default sysdate, -- 생성일자 등록
+ primary key(i_student, i_hobby), --pk 등록
+ foreign key(i_student) references t_student(i_student), -- fk등록하는 방법 / 다른 테이블의 컬럼을 참조(해당 테이블의 컬럼에 해당하는 pk(존재하는 pk)만 사용가능
+ foreign key(i_hobby) references t_hobby(i_hobby)
+); 
+
+CREATE TABLE t_student_hobby (
+ id_student number,
+ i_hobby number,
+ r_dt date default sysdate,
+ primary key(id_student, i_hobby),
+ foreign key(id_student) references t_student(id_student),
+ foreign key(i_hobby) references t_hobby(i_hobby)
+);
