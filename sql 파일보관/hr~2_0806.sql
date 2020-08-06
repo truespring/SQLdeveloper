@@ -1,0 +1,7 @@
+CREATE OR REPLACE TRIGGER trg_DEL_CUSTOMER
+BEFORE DELETE ON t_customer
+FOR EACH ROW
+BEGIN
+    DELETE FROM t_order
+    WHERE cus_no =:old.cus_no;
+END;
