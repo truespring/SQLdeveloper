@@ -11,12 +11,14 @@ CREATE TABLE t_board4(
 
 CREATE table t_board5(
     i_board number PRIMARY key,
-    title VARCHAR2(100) not null,
-    ctnt VARCHAR2(2000) not null,
+    title NVARCHAR2(100) not null,
+    ctnt NVARCHAR2(2000) not null,
     hits NUMBER default 0,
     i_user number not null,
     r_dt date DEFAULT sysdate,
     m_dt date DEFAULT sysdate,
     FOREIGN key(i_user) REFERENCES t_user(i_user)
  );
+ 
+ DROP TABLE t_board5;
  
