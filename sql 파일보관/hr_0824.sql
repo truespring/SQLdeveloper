@@ -48,3 +48,6 @@ VALUES
 commit;
 
 SELECT * FROM t_board5_like;
+
+DELETE FROM t_board5_like 
+WHERE  i_board = 33;
