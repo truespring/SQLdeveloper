@@ -11,8 +11,8 @@ CREATE TABLE t_user_loginhistory(
  foreign key (i_user) references t_user(i_user)
 );
 
-SELECT * FROM t_user_loginhistory;
-SELECT * FROM t_user;
+SELECT * FROM t_user_loginhistory ORDER BY i_history DESC;
+SELECT * FROM t_user ORDER BY i_user DESC;
 
 DROP TABLE t_user_loginhistory;
 DROP SEQUENCE seq_userloginhistory;
@@ -28,7 +28,8 @@ CREATE TABLE t_board5_like(
 
 DROP TABLE t_like;
 
-SELECT A.*, B.nm, DECODE(C.i_user, null, 0, 1) as yn_like -- 3항식과 같다
+SELECT A.*, B.nm, DECODE(C.i_user, null, 0, 1) as yn_like, -- 3항식과 같다
+ (SELECT count(*) FROM t_board5_like WHERE i_board=10) as boardlike
 FROM t_board5 A
 
 INNER JOIN t_user B
