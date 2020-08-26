@@ -13,7 +13,7 @@ commit;
 
 CREATE SEQUENCE seq_board5_cmt
 start with 0
-minvalue 0 -- minvalue ±âº»°ªÀÌ 1ÀÌ±â ¶§¹®¿¡ ÀûÁö ¾ÊÀ¸¸é ¿¡·¯ ¹ß»ı
+minvalue 0 -- minvalue ì˜ ê¸°ë³¸ê°’ì€ 0 ì´ê¸°ë•Œë¬¸ì— ì ì§€ ì•Šìœ¼ë©´ ì—ëŸ¬ê°€ ë°œìƒ
 nocache;
 
 DROP SEQUENCE seq_board5_cmt;
