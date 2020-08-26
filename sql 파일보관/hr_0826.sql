@@ -35,3 +35,21 @@ FROM t_board5 A
 INNER JOIN t_user B 
 ON A.i_user = B.i_user 
 ORDER BY i_board DESC;
+
+SELECT *
+FROM t_board5 A
+LEFT JOIN t_board5_cmt B
+ON A.i_board = B.i_board;
+
+SELECT count(*)
+FROM t_board5_cmt
+GROUP BY i_board;
+
+SELECT A.i_board, b.cmt_cnt
+FROM t_board5 A
+LEFT JOIN (		   
+ SELECT i_board, count(i_board) as cmt_cnt
+ FROM t_board5_cmt
+ group by i_board
+ )B			    
+ON a.i_board = b.i_board;
