@@ -9,6 +9,10 @@ CREATE TABLE t_board5_cmt (
  foreign key (i_user) references t_user(i_user)
 );
 
+SELECT * FROM t_board5_cmt;
+
+delete from t_board5_cmt where i_cmt = 5;
+
 commit;
 
 CREATE SEQUENCE seq_board5_cmt
@@ -17,3 +21,17 @@ minvalue 0 -- minvalue 의 기본값은 0 이기때문에 적지 않으면 에�
 nocache;
 
 DROP SEQUENCE seq_board5_cmt;
+
+SELECT A.i_cmt, B.nm, A.cmt, A.r_dt, A.i_board
+FROM t_board5_cmt A
+INNER JOIN t_user B
+ON A.i_user = B.i_user
+ORDER BY i_cmt DESC;
+
+SELECT count(*) FROM t_board5_cmt;
+
+SELECT A.i_board, A.title, A.hits, A.i_user, A.r_dt, B.nm
+FROM t_board5 A 
+INNER JOIN t_user B 
+ON A.i_user = B.i_user 
+ORDER BY i_board DESC;
