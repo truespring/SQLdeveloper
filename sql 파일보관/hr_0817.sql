@@ -2,6 +2,7 @@ CREATE sequence seq_user
 nocache; -- 컴퓨터를 껏다 키면 캐시가 사라지기 때문에 막아줘야함 시퀀스 생성
 
 SELECT * FROM t_user;
+SELECT count(*) FROM t_user;
 
 CREATE TABLE t_user(
  i_user number primary key,

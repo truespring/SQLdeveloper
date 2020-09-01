@@ -28,7 +28,7 @@ CREATE TABLE t_board5_like(
 
 DROP TABLE t_like;
 
-SELECT A.*, B.nm, DECODE(C.i_user, null, 0, 1) as yn_like, -- 3항식과 같다
+SELECT A.*, B.nm, DECODE(C.i_user, null, 0, 1) as yn_like, 
  (SELECT count(*) FROM t_board5_like WHERE i_board=10) as boardlike
 FROM t_board5 A
 
